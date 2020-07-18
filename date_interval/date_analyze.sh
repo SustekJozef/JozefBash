@@ -4,17 +4,14 @@
 # Finds all *.csv files from selected directories given in argument
 # concatenate of files in one stream
 array+=$(find $1 -name "*.csv" -type f)
-#
 
 
 
+# removes additional 4 characters in 4th collum,because of mistakes in log, which has writen 2 times year eg.1.1.20202020.
 for file in ${array[*]}
 do
-    # removes additional 4 characters in 4th collum,because of mistakes in log, which has writen 2 times year eg.1.1.20202020.
-    awk -F ',' '{$4=substr($4,1,length($4)-4)} {print $4}' "$file" |
+    awk -F ',' '{$4=substr($4,1,length($4)-4)} {print $4}' "$file" | sort -t '-' -nk3 -nk2 -nk1 ;  print
     #sorting dates in files by year, month and day.
-    sort -t '-' -nk3 -nk2 -nk1 $1; print $1
-
 done
 
 

@@ -7,11 +7,16 @@ array+=$(find $1 -name "*.csv" -type f)
 
 
 
-# removes additional 4 characters in 4th collum,because of mistakes in log, which has writen 2 times year eg.1.1.20202020.
 for file in ${array[*]}
 do
-    awk -F ',' '{$4=substr($4,1,length($4)-4)} {print $4}' "$file" | sort -t '-' -nk3 -nk2 -nk1 ;  print
+    # cuts first line from each file (first line included head of document
+    sed '1d' "$file" |
+
+    #join "$file" |
+    # removes additional 4 characters in 4th column,because of mistakes in log, which has writen 2 times year eg.1.1.20202020.
+    awk -F ',' '{$4=substr($4,1,length($4)-4)} {print $4}' "$file" |
     #sorting dates in files by year, month and day.
+    sort -t '-' -nk3 -nk2 -nk1 ;  print
 done
 
 
